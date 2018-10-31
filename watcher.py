@@ -23,7 +23,8 @@ for pull in api.pulls(state='open'):
     sha = pull["head"]["sha"]
 
     statuses = api.statuses(sha)
-    if statuses and statuses['FreeBSD']:
+    if statuses and statuses['FreeBSD'] and statuses['FreeBSD']['state'] != 'pending':
+        print(statuses['FreeBSD']['state'])
         print("This commit has been already tested.")
         continue
 
