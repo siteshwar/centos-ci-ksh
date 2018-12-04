@@ -70,14 +70,19 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell" do |s|
       s.inline="sh
-        export LANG=en_US.UTF-8;
         set -e
         pkg update
-        pkg install -y meson git
-        su - vagrant
-        git clone #{ENV['git_url']}
-        cd ast
-        git checkout #{ENV['sha']}
-        meson build && ninja -C build"
+        pkg install -y meson git nc bash
+        chsh -s /usr/local/bin/bash vagrant
+        su - vagrant -c 'set -e;
+        git clone #{ENV['git_url']};
+        cd ast;
+        git checkout #{ENV['sha']};
+        export LANG=en_US.UTF-8;
+        meson build && ninja -C build;
+        cd build;
+        meson test -t 3 || :;
+        echo NOTE: bracket, directoryfd and special-dev-paths tests are known to fail on FreeBSD;
+        exit 0;'"
   end
 end
