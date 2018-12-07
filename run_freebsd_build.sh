@@ -12,7 +12,7 @@ description="Build is running"
 curl -s --user $GITHUB_USER:$GITHUB_API_KEY -X POST --data "{\"state\": \"$state\", \"description\": \"$description\", \"context\": \"FreeBSD\" }" "$statuses_url"
 
 set -o pipefail
-ix_url=$(vagrant up | curl -F 'f:1=<-' ix.io)
+out=$(vagrant up)
 
 if [[ $? -eq 0 ]]; then
     state="success"
@@ -21,6 +21,8 @@ else
     state="failure"
     description="Build failed"
 fi
+
+ix_url=$(echo "$out" | curl -F 'f:1=<-' ix.io)
 
 curl -s --user $GITHUB_USER:$GITHUB_API_KEY -X POST --data "{\"state\": \"$state\", \"description\": \"$description\", \"context\": \"FreeBSD\", \"target_url\": \"$ix_url\" }" "$statuses_url"
 
