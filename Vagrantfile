@@ -81,8 +81,11 @@ Vagrant.configure("2") do |config|
         export LANG=en_US.UTF-8;
         meson build && ninja -C build;
         cd build;
-        meson test || :;
-        echo NOTE: bracket, directoryfd and special-dev-paths tests are known to fail on FreeBSD;
+        if ! meson test --setup=malloc
+        then
+          cat meson-logs/testlog-malloc.txt
+        fi
+        echo NOTE: directoryfd and special-dev-paths tests are known to fail on FreeBSD;
         exit 0;'"
   end
 end
