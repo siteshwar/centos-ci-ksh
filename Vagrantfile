@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "freebsd/FreeBSD-11.2-STABLE"
+  config.vm.box = "freebsd/FreeBSD-12.0-STABLE"
   config.vm.base_mac = "123456123456"
   config.ssh.shell = "sh"
   # Disable automatic box update checking. If you disable this, then
